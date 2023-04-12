@@ -19,11 +19,10 @@ jobs:
       - name: Install SonarScanner
         run: |
           curl -L -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-          unzip sonarscanner.zip
+          unzip sonarscanner.zip -d sonar-scanner
       - name: SonarCloud Scan
         run: |
-          ./sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-            -Dsonar.projectKey= My Project\
-            -Dsonar.organization=https://sonarcloud.io/images/project_badges/sonarcloud-black.svg
+          sonar-scanner/bin/sonar-scanner \
+            -Dsonar.projectKey=my-project \
+            -Dsonar.organization=MyOrganization \
             -Dsonar.sources=.
-      
