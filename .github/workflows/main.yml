@@ -1,31 +1,43 @@
-name: SonarCloud 
+name: Build Go Code
 
 on:
-  pull_request:
   push:
     branches:
       - main
 
 jobs:
-  sonarcloud:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
-      - name: Install SonarScanner
-        run: |
-          curl -L -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-          unzip sonarscanner.zip
-      - name: SonarCloud Scan
-        run: |
-          ./sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-            -Dsonar.projectKey=my-project-key \
-            -Dsonar.organization=<your-sonarcloud-organization> \
-            -Dsonar.sources=.
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go environment
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.17'
+
+    - name: Build Go code
+      run: |
+        go build -o myapp main.go
+        
+    - name: Test go code using test scripts
+      run: |
+        go test -v ./...
+    - name: Archive artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: myapp
+        path: ./myapp
+    
+    - name: Download and install SonarScanner
+      run: |
+        wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-{VERSION}.zip
+        unzip sonar-scanner-cli-4.6.2.2472.zip
+        sudo mv sonar-scanner-4.6.2.2472 /opt/sonar-scanner
+        echo "export PATH=$PATH:/opt/sonar-scanner/bin" >> ~/.bashrc
+        source ~/.bashrc
+    - name: SonarCloud Scan
+      env:
+        GOCACHE: /tmp/.cache/go-build
+      run: sonar-scanner
