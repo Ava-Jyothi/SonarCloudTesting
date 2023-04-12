@@ -23,7 +23,7 @@ jobs:
       - name: SonarCloud Scan
         run: |
           ./sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-            -Dsonar.projectKey=<your-project-key> \
+            -Dsonar.projectKey=my-project-key \
             -Dsonar.organization=<your-sonarcloud-organization> \
             -Dsonar.sources=.
         env:
