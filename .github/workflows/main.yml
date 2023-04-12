@@ -2,6 +2,7 @@ name: SonarCloud Analysis
 
 on:
   pull_request:
+    types: [opened, synchronize]
   push:
     branches:
       - main
@@ -28,5 +29,5 @@ jobs:
           SONAR_HOST_URL: https://sonarcloud.io
         run: |
           sonar-scanner/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-            -Dsonar.projectKey=$my-project \
+            -Dsonar.projectKey=$project-key \
             -Dsonar.sources=.
