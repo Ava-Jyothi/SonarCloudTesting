@@ -23,7 +23,7 @@ jobs:
       - name: SonarCloud Scan
         run: |
           ./sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-            -Dsonar.projectKey=pr \
-            -Dsonar.organization=[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=pr)\
+            -Dsonar.projectKey= My Project\
+            -Dsonar.organization=https://sonarcloud.io/images/project_badges/sonarcloud-black.svg
             -Dsonar.sources=.
       
