@@ -28,6 +28,5 @@ jobs:
           SONAR_HOST_URL: https://sonarcloud.io
         run: |
           sonar-scanner/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-            -Dsonar.projectKey=my-project \
-            -Dsonar.organization=MyOrganization \
+            -Dsonar.projectKey=$my-project \
             -Dsonar.sources=.
