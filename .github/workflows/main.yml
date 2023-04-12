@@ -29,6 +29,6 @@ jobs:
           SONAR_HOST_URL: https://sonarcloud.io
         run: |
           sonar-scanner/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-            -Dsonar.organization="Ava-Jyothi" \
+            -Dsonar.organization="ava-jyothi" \
             -Dsonar.projectKey="avasoft-devops" \
             -Dsonar.sources=.
