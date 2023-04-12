@@ -31,4 +31,5 @@ jobs:
           sonar-scanner/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
             -Dsonar.organization="ava-jyothi" \
             -Dsonar.projectKey="avasoft-devops" \
+            -Dsonar.branch.name=main \
             -Dsonar.sources=.
