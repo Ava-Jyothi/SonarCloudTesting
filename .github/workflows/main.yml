@@ -34,9 +34,5 @@ jobs:
               -Dsonar.sources=. \
               -Dsonar.organization=ava-jyothi \
               -Dsonar.branch.name=main
-            shell: /usr/bin/bash -e {0}
-        env:
-            GOROOT: /opt/hostedtoolcache/go/1.17.13/x64
-            SONAR_HOST_URL: https://sonarcloud.io
 
 
