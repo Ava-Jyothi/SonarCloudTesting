@@ -27,12 +27,11 @@ jobs:
       - name: SonarCloud Scan
         env:
           SONAR_HOST_URL: https://sonarcloud.io
-      - run: |
-            echo "[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=project_id)"
-            sonar-scanner \
-              -Dsonar.projectKey=Ava-Jyothi_SonarCloudTesting \
-              -Dsonar.sources=. \
-              -Dsonar.organization=ava-jyothi \
-              -Dsonar.branch.name=main
-
-
+          GOROOT: /opt/hostedtoolcache/go/1.17.13/x64
+        run: |
+          echo "[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Ava-Jyothi_SonarCloudTesting)"
+          sonar-scanner \
+            -Dsonar.projectKey=Ava-Jyothi_SonarCloudTesting \
+            -Dsonar.sources=. \
+            -Dsonar.organization=ava-jyothi \
+            -Dsonar.branch.name=main
