@@ -32,4 +32,4 @@ jobs:
             -Dsonar.projectKey=$project-key \
             -Dsonar.sources=. \
             -Dsonar.organization=ava-jyothi \
-            -Dsonar.branch.name=main
+            -Dsonar.branch.name=Main Branch
