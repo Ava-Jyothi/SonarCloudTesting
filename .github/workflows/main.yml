@@ -27,9 +27,11 @@ jobs:
       - name: SonarCloud Scan
         env:
           SONAR_HOST_URL: https://sonarcloud.io
-        run: | 
-           echo "[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=project_id)"
-            -Dsonar.projectKey=$project-key \
-            -Dsonar.sources=. \
-            -Dsonar.organization=ava-jyothi \
-            -Dsonar.branch.name=Main Branch
+        run: |
+            - echo "[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=project_id)"
+            - sonar-scanner \
+              -Dsonar.projectKey=project-key \
+              -Dsonar.sources=. \
+              -Dsonar.organization=ava-jyothi \
+              -Dsonar.branch.name=main
+
