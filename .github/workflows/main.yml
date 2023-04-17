@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.17
-      - name: Install SonarScanner
+      - name: Download and Install SonarScanner
         run: |
           curl -L -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
           unzip sonarscanner.zip -d sonar-scanner
