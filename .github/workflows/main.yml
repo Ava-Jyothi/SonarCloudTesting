@@ -1,6 +1,8 @@
 name: SonarCloud Analysis
 
 on:
+  pull_request:
+    types: [opened, synchronize]
   push:
     branches:
       - main
@@ -8,29 +10,29 @@ on:
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Set up Go
+      - name: Setup Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16
-
-      - name: Install SonarCloud Scan
+          go-version: 1.17
+      - name: Install SonarScanner
         run: |
-          curl -L https://github.com/SonarSource/sonar-scanner-cli/releases/download/4.6.2.2472/sonar-scanner-cli-4.6.2.2472-linux.zip -o sonar-scanner.zip
-          unzip sonar-scanner.zip
-          rm sonar-scanner.zip
-          mv sonar-scanner-4.6.2.2472-linux /opt/sonar-scanner
-        working-directory: ${{ github.workspace }}
-
-      - name: Run SonarCloud Scan
+          curl -L -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip sonarscanner.zip -d sonar-scanner
+      - name: List directory contents
+        run: |
+          ls -al
+      - name: SonarCloud Scan
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+          GOROOT: /opt/hostedtoolcache/go/1.17.13/x64
         run: |
-          /opt/sonar-scanner/bin/sonar-scanner \
-            -Dsonar.projectKey=<your_project_key> \
-            -Dsonar.organization=<your_organization_key> \
+          sonar-scanner -v
+          echo "[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Ava-Jyothi_SonarCloudTesting)"
+          sonar-scanner \
+            -Dsonar.projectKey=Ava-Jyothi_SonarCloudTesting \
+            -Dsonar.sources=. \
+            -Dsonar.organization=ava-jyothi \
+            -Dsonar.branch.name=main
