@@ -1,47 +1,17 @@
-name: Build Go Code
+ name: Checkout code
+ uses: actions/checkout@v2
+ name: Install Go
+ uses: actions/setup-go@v2
+  with:
+    go-version: '1.16'
 
-on:
-  push:
-    branches:
-      - main
+- name: Install SonarScanner
+  run: |
+    wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+    unzip sonar-scanner-cli-4.6.2.2472-linux.zip
+    rm sonar-scanner-cli-4.6.2.2472-linux.zip
+    mv sonar-scanner-4.6.2.2472-linux /usr/local/sonar-scanner
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Go environment
-      uses: actions/setup-go@v2
-      with:
-        go-version: '1.17'
-
-    - name: Build Go code
-      run: |
-        go build -o myapp main.go
-        
-    - name: Test go code using test scripts
-      run: |
-        go test -v ./...
-
-    - name: Archive artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: myapp
-        path: ./myapp
-    
-    - name: Download and install SonarScanner
-      run: |
-        echo /home/runner/Downloads/sonar-scanner-cli-4.8.0.2856-windows.zip/sonar-scanner-4.8.0.2856-windows/bin
-        unzip sonar-scanner-cli-4.6.2.2472.zip
-        sudo mv sonar-scanner-4.6.2.2472 /opt/sonar-scanner
-        echo "export PATH=$PATH:C:\Users\Jyothi.G\Downloads\sonar-scanner-cli-4.8.0.2856-windows.zip\sonar-scanner-4.8.0.2856-windows\bin" >> ~/.bashrc
-        source ~/.bashrc
-
-
-
-    - name: SonarCloud Scan
-      env:
-        GOCACHE: /tmp/.cache/go-build
-      run: sonar-scanner
+- name: Run SonarScanner
+  run: |
+    /usr/local/sonar-scanner/bin/sonar-scanner
