@@ -35,3 +35,9 @@ jobs:
             -Dsonar.organization=ava-jyothi \
             -Dsonar.branch.name=main \
             -Dsonar.host.url=${SONAR_HOST_URL}
+      - name: Upload scan results
+        uses: actions/upload-artifact@v2
+        with:
+          name: SonarCloud scan results
+          path: .scannerwork/report-task.txt
+
