@@ -33,6 +33,6 @@ jobs:
           -Dsonar.exclusions=**/*_test.go
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.go.coverage.reportPaths=coverage.out sonar-scanner -X
-          -Dsonar.organization=<ava-devops> 
+          -Dsonar.organization=<ava-jyothi> 
           -Dsonar.projectKey=<Ava-Jyothi_SonarCloudTesting> 
           -Dsonar.sources=<path_to_your_source_files>
