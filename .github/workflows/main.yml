@@ -26,8 +26,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
-        organization: "your-organization"
-        project: "your-project-key"
+        organization: "ava-jyothi"
+        project: "Ava-Jyothi_SonarCloudTesting"
         scannerArgs: >
           -Dsonar.sources=.
           -Dsonar.exclusions=**/*_test.go
