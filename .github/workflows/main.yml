@@ -1,46 +1,32 @@
-name: SonarCloud Scan
+name: SonarCloud Analysis
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v2
-    - name: Setup Go
+
+    - name: Set up Go
       uses: actions/setup-go@v2
       with:
-        go-version: '1.17'
-    - name: Build Go code
-      run: |
-        go build -o myapp main.go
-    - name: Archive artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: myapp
-        path: ./myapp
-    - name: Install dependencies
+        go-version: 1.16
+
+    - name: Get dependencies
       run: go mod download
-    - name: Run tests
-      run: go test -v ./...
+
+    - name: Build
+      run: go build -v -o app
+
+    - name: Run tests and coverage
+      run: go test -v -race -coverprofile=coverage.out ./...
+
     - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@master
+      uses: sonarsource/sonarcloud-github-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        organization: "ava-jyothi"
-        project: "Ava-Jyothi_SonarCloudTesting"
-        scannerArgs: >
-          -Dsonar.sources=.
-          -Dsonar.exclusions=**/*_test.go
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.go.coverage.reportPaths=coverage.out sonar-scanner -X
-          -Dsonar.organization=<ava-jyothi> -X
-          -Dsonar.projectKey=<Ava-Jyothi_SonarCloudTesting> 
-          -Dsonar.sources=<path_to_your_source_files>
