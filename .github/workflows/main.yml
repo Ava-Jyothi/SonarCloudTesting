@@ -1,43 +1,36 @@
-name: SonarCloud Analysis
+name: SonarCloud Scan
 
 on:
-  pull_request:
-    types: [opened, synchronize]
   push:
     branches:
       - main
 
 jobs:
   sonarcloud:
+    name: SonarCloud
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
-      - name: Install SonarScanner
-        run: |
-          curl -L -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-          unzip sonarscanner.zip -d sonar-scanner
-      - name: List directory contents
-        run: |
-          ls -al
-      - name: SonarCloud Scan
-        env:
-          SONAR_HOST_URL: https://sonarcloud.io
-          GOROOT: /opt/hostedtoolcache/go/1.17.13/x64
-        run: |
-          sonar-scanner -v \[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=Ava-Jyothi_SonarCloudTesting)
-            -Dsonar.projectKey=Ava-Jyothi_SonarCloudTesting \
-            -Dsonar.sources=. \
-            -Dsonar.organization=ava-jyothi \
-            -Dsonar.branch.name=main \
-            -Dsonar.host.url=${SONAR_HOST_URL}
-      - name: Upload scan results
-        uses: actions/upload-artifact@v2
-        with:
-          name: SonarCloud scan results
-          path: .scannerwork/report-task.txt
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.17'
+    - name: Install dependencies
+      run: go mod download
+    - name: Run tests
+      run: go test -v ./...
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        organization: "your-organization"
+        project: "your-project-key"
+        scannerArgs: >
+          -Dsonar.sources=.
+          -Dsonar.exclusions=**/*_test.go
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.go.coverage.reportPaths=coverage.out
 
