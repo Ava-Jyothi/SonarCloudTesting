@@ -1,37 +1,42 @@
-name: SonarCloud Analysis
+name: Go pipeline
 
 on:
-  pull_request:
-    types: [opened, synchronize]
   push:
     branches:
       - main
 
 jobs:
-  sonarcloud:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
+      
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
           go-version: 1.17
-      - name: Install SonarScanner
+      
+      - name: Build and test
         run: |
-          curl -L -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-          unzip sonarscanner.zip -d sonar-scanner
-      - name: List directory contents
-        run: |
-          ls -al
-      - name: SonarCloud Scan
+          go build ./...
+          go test ./...
+      
+      - name: SonarCloud scan
+        uses: sonarsource/sonarcloud-github-action@v1
         env:
-          SONAR_HOST_URL: https://sonarcloud.io
-          GOROOT: /opt/hostedtoolcache/go/1.17.13/x64
-        run: |
-          sonar-scanner -v
-          echo "[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=Ava-Jyothi_SonarCloudTesting)"
-            -Dsonar.projectKey=Ava-Jyothi_SonarCloudTesting \
-            -Dsonar.sources=. \
-            -Dsonar.organization=ava-jyothi \
-            -Dsonar.branch.name=main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: ./
+          args: >
+            -Dsonar.sources=.
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.coverageReportPaths=./coverage.out
+          
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: ./coverage.out
