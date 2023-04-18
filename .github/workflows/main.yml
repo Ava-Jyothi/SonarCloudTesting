@@ -1,42 +1,22 @@
-name: Go pipeline
+name: SonarCloud Analysis
 
 on:
+  pull_request:
+    types: [opened, synchronize]
   push:
     branches:
       - main
 
 jobs:
-  build:
+  sonarcloud:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
-      
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
           go-version: 1.17
-      
-      - name: Build and test
+      - name: Install SonarScanner
         run: |
-          go build ./...
-          go test ./...
-      
-      - name: SonarCloud scan
-        uses: sonarsource/sonarcloud-github-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: ./
-          args: >
-            -Dsonar.sources=.
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-            -Dsonar.coverage.reportPaths=./coverage.out
-          
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: ./coverage.out
+          curl -L -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4
