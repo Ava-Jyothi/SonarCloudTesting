@@ -30,7 +30,7 @@ jobs:
           GOROOT: /opt/hostedtoolcache/go/1.17.13/x64
         run: |
           sonar-scanner -v
-          [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=Ava-Jyothi_SonarCloudTesting)
+          echo "[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=Ava-Jyothi_SonarCloudTesting)"
             -Dsonar.projectKey=Ava-Jyothi_SonarCloudTesting \
             -Dsonar.sources=. \
             -Dsonar.organization=ava-jyothi \
