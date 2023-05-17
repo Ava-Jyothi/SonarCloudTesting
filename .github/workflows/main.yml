@@ -23,5 +23,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact
-          path: path/to/Build
+          path: path/to/sonarcloud
 
