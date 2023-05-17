@@ -1,27 +1,38 @@
-name: Build
+name: Go Build and Test
+
 on:
   push:
     branches:
       - main
-  pull_request:  
-    types: [opened, synchronize, reopened]
-    
-jobs:
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if anym
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-artifact
-          path: path/to/sonarcloud
+  pull_request:
+    branches:
+      - main
 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Build and Test
+      run: |
+        go build -o myapp ./path/to/source
+        go test ./path/to/tests
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: path/to/artifact
